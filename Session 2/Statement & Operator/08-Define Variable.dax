@@ -1,0 +1,25 @@
+﻿//Variable can use other variable
+//we can define one time variable and use it multiple times
+//Define could define one but Evaluate can define more
+DEFINE
+VAR __one=1
+VAR __two=__one*2
+
+EVALUATE
+{__one}
+
+EVALUATE
+{__one*__two}
+
+
+//we can not use inner variable
+DEFINE
+VAR __one = 1
+VAR __two =
+			VAR __a = 3
+			VAR __b = __a * __one * 3
+			
+			RETURN __b
+
+EVALUATE
+{__a}

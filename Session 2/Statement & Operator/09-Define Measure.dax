@@ -1,0 +1,30 @@
+﻿// Measure Called when Called and accept Filter Context
+DEFINE
+MEASURE Sales[Sales Amount]=SUMX(Sales,Sales[Quantity]*Sales[Unit Price])
+VAR __SalesAmount=SUMX(Sales,Sales[Quantity]*Sales[Unit Price])
+MEASURE Sales[Sales Cost]=SUMX(Sales,Sales[Quantity]*RELATED('Product'[Unit Cost]))
+MEASURE Sales[Ratio]=Divide(Sales[Sales Cost],Sales[Sales Amount])
+MEASURE Sales[Ratio by Variable]=Divide(Sales[Sales Cost],__SalesAmount)
+
+
+EVALUATE
+{Sales[Sales Amount]}
+
+
+EVALUATE
+{Sales[Ratio]}
+
+
+EVALUATE
+{Sales[Ratio by Variable]}
+
+//Variable called one and calculate while Measure Called when use so accept filter context
+EVALUATE
+ADDCOLUMNS(
+VALUES(Store[Country]),
+"Sales Amount Measure",Sales[Sales Amount],
+"Sales Amount Values",__SalesAmount
+)
+
+
+

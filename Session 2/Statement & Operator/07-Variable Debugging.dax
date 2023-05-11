@@ -1,0 +1,21 @@
+﻿EVALUATE
+VAR __one = 1
+VAR __two = __one * 2
+VAR __three = __one * __two * 3
+RETURN
+    { __one }
+    
+    
+EVALUATE
+VAR __one = 1
+VAR __two = __one * 2
+VAR __three = __one * __two * 3
+RETURN
+    { __two }
+    
+EVALUATE
+VAR __one = 1
+VAR __two = __one * 2
+VAR __three = __one * __two * 3
+RETURN
+    { __three }

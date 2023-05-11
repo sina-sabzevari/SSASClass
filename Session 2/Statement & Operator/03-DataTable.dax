@@ -1,0 +1,23 @@
+﻿EVALUATE
+DATATABLE (
+    "Id", INTEGER,
+    "Sales", INTEGER,
+    {
+        { 1, 1000 },
+        { 2, 2000 },
+        { 3, 1000 }
+    }
+)
+
+
+
+// Error happens when we use caculation in DataTable
+
+EVALUATE
+DATATABLE (
+    "Id", INTEGER,
+    "Quantity Amount", INTEGER,
+    {
+        { 1, SUM(Sales[Quantity]) }
+    }
+)

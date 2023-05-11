@@ -1,0 +1,10 @@
+﻿//Column and Table like Variable when deine it's called
+Define
+COLUMN Sales[Sales_Amount]=Sales[Quantity]*Sales[Unit Price]
+TABLE StoreCountry=VALUES(Store[Country])
+
+EVALUATE
+{SUM(Sales[Sales_Amount])}
+
+EVALUATE
+StoreCountry

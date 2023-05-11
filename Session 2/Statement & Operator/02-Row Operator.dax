@@ -1,0 +1,13 @@
+﻿EVALUATE
+ROW("Id",1,"Sales",1000)
+
+
+EVALUATE
+ROW("Id",1,"Quantity Amount",SUM(Sales[Quantity]))
+
+EVALUATE
+UNION(
+ROW("Id",1,"Sales",1000),
+ROW("Id",2,"Sales",2000),
+ROW("number",3,"Sales",1000)
+)

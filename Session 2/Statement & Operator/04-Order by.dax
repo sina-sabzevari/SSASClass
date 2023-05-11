@@ -1,0 +1,7 @@
+﻿EVALUATE
+Store
+ORDER BY Store[Square Meters] DESC
+
+EVALUATE 
+Store
+ORDER BY Store[Square Meters] DESC,Store[Open Date] asc

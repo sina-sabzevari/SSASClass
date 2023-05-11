@@ -1,0 +1,58 @@
+﻿//Variable calculate once when called in other words when calculated it does not affect by filter context
+
+EVALUATE
+VAR __result = Store RETURN __result
+
+EVALUATE
+VAR __result = 1 RETURN { __result }
+
+// we can use variable in other variable definition
+EVALUATE
+VAR __one = 1
+VAR __two = __one * 2
+VAR __three = __one * __two * 3
+RETURN
+    { __three }
+
+//nested variable definition, inner variable can use outer variable
+
+EVALUATE
+VAR __one = 1
+VAR __two =
+			VAR __a = 3
+			VAR __b = __a * __one * 3
+			RETURN __b
+RETURN
+    { __two }
+    
+//nested variable definition, outer variable can not use inner variable and error happend
+EVALUATE
+VAR __one = 1
+VAR __two =
+			VAR __a = 3
+			VAR __b = __a * __one * 3
+			
+			RETURN __b
+VAR __three=__a+ __two
+RETURN
+    { __three }
+    
+    
+    
+    
+//Sample 1    
+EVALUATE
+VAR __SaleAmount=SUMX(Sales,Sales[Quantity]*Sales[Unit Price])
+VAR __Cost=SUMX(Sales,Sales[Quantity]*RELATED('Product'[Unit Cost]))
+VAR __Result=1-DIVIDE(__Cost,__SaleAmount)
+RETURN
+{__Result}
+
+
+
+//Sample 2
+EVALUATE
+VAR __Store=Store
+VAR __result=COUNTROWS(__Store)
+RETURN
+{__result}

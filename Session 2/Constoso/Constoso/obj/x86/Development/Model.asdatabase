@@ -1,0 +1,13 @@
+{
+  "name": "Constoso",
+  "compatibilityLevel": 1600,
+  "model": {
+    "culture": "en-US",
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "700"
+      }
+    ]
+  }
+}

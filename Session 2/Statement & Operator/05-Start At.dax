@@ -1,0 +1,11 @@
+﻿EVALUATE
+Store
+ORDER BY Store[Open Date]
+START AT DATE ( 2015, 01, 01 )
+
+EVALUATE
+store
+ORDER BY
+    store[Open Date],
+    store[Square Meters]
+START AT DATE ( 2015, 01, 01 ),1000

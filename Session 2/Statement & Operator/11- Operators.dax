@@ -1,0 +1,72 @@
+﻿EVALUATE
+{(
+    10 + 32,
+    "10" + 32,
+    "Sina" & " " & "Sabzevari",
+    CONCATENATE ( CONCATENATE ( "Sina", " " ), "Sabzevari" ),
+    10 & 32)
+ 
+}
+
+EVALUATE
+ROW(
+"10^2",10^2,
+"POWER(10,2)",POWER(10,2),
+"DIVIDE(10,3,0)",DIVIDE(10,3,0), 
+"MOD(10,3)",MOD(10,3)
+)
+
+
+
+EVALUATE
+{(    DATE (2010,3,25),
+    DATE (2010,3,25) + 10,
+    DATE (2010,3,25) * 1,
+    VALUE(DATE (2010,3,25)),
+    DATE (2010,3,25) * 2,
+    DATE (2010,3,25) & 2)}
+EVALUATE
+ROW
+(
+"10/0",10/0,
+"0/0",0/0,
+"DIVIDE(10/0,7/0)",DIVIDE(10/0,7/0),
+"DIVIDE(10,7/0)",DIVIDE(10,7/0),
+"BLANK()=0",BLANK()=0,
+"BLANK()==0",BLANK()==0,
+"sInA=SiNa","sInA"="SiNa",
+"sInA==SiNa","sInA"=="SiNa",
+"BLANK() + BLANK()",BLANK() + BLANK(),
+"BLANK() / BLANK()",BLANK() / BLANK(),
+"10 * BLANK()",10 * BLANK(),
+"4 / Blank()",4 / Blank(),
+"0 / BLANK()",0 / BLANK(),
+"TRUE && BLANK() = FALSE",TRUE && BLANK() = FALSE
+)
+
+EVALUATE
+ROW (
+    "TRUE() && FALSE() || TRUE()",
+        TRUE () && FALSE () || TRUE (),
+    "OR(AND(TRUE(),FALSE()),TRUE()))", OR ( AND ( TRUE (), FALSE () ), TRUE () )
+)
+
+
+EVALUATE
+{
+{"RED"} IN { "Red", "Blue", "Black" }
+}
+
+EVALUATE
+{
+NOT({"blue"} IN { "Red", "Blue", "Black" })
+}
+
+//number of product are Red, Blue, Black
+EVALUATE
+{
+SUMX('Product',('Product'[Color] in { "Red", "Blue", "Black" })*1)
+}
+
+
+
