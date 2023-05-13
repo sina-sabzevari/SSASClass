@@ -1,0 +1,25 @@
+﻿DEFINE
+VAR _SalesAmount_define=SUMX(Sales,Sales[Quantity]*Sales[Unit Price])
+
+
+EVALUATE
+VAR _salesAmount_Evaluate=SUMX(Sales,Sales[Quantity]*Sales[Unit Price])
+RETURN
+SUMMARIZECOLUMNS(
+'Product'[Color],
+TREATAS({"Europe"},Customer[Continent]),
+"Sales Amount define",_SalesAmount_define,
+"Sales Amount Evaluate",_salesAmount_Evaluate,
+"Sales Amount Measure",
+	VAR _salesAmount_measure=SUMX(Sales,Sales[Quantity]*Sales[Unit Price])
+	Return _salesAmount_measure,
+"Sales Amount Measure Inner",
+	VAR _salesAmount_measure=
+		VAR _salesAmount_inner=SUMX(Sales,Sales[Quantity]*Sales[Unit Price])
+		return 
+		_salesAmount_inner
+		return _salesAmount_measure,
+	
+"Sale Amount",SUMX(Sales,Sales[Quantity]*Sales[Unit Price])	
+
+)
