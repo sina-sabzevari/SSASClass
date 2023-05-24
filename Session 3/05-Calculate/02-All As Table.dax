@@ -1,0 +1,68 @@
+﻿--Using a single column argument, ALL returns all the unique values of the column.
+
+EVALUATE
+ALL ( Customer[Gender] )
+
+//In every case, ALL includes in the result the additional blank row generated for invalid relationships.
+EVALUATE
+ALL(Continent)
+
+//The result can include blank values if the table has blank values
+EVALUATE
+ALLNOBLANKROW('Product'[Weight])
+// The only blank that is not included in the result is the one added to the table in case of invalid relationships.
+EVALUATE
+ALLNOBLANKROW(Continent)
+--Using two or more columns arguments, ALL returns all the unique combinations of values in multiple columns.
+EVALUATE
+ALL ( Customer[Gender], Customer[Age] )
+--In every case, ALL includes in the result the additional blank row generated for invalid relationships.
+/*
+The result can include blank values if the table has blank values. 
+The only blank that is not included in the result is the one added to the table in case of invalid relationships.
+*/
+
+EVALUATE
+ALLNOBLANKROW ( Store[Status] )
+//ALLEXCEPT materializes all the unique combinations of the columns in the table specified 
+//in the first argument that are not listed in the following arguments
+
+EVALUATE
+ALLEXCEPT ( Customer, Customer[Gender], Customer[age] )
+--ALL returns all the unique values of the column
+
+EVALUATE
+ALL ( Store[Country] )
+--All does not affect by filter
+
+EVALUATE
+CALCULATETABLE (
+    ALL ( Store[Country] ),
+    store[Country] IN { "canada", "france" }
+)
+-- Without filter, ALLSELECTED works like All
+
+EVALUATE
+ALLSELECTED ( Store[Country] )
+--when filter applys, ALLSELECTED filter the column we have
+
+EVALUATE
+CALCULATETABLE (
+    ALLSELECTED ( Store[Country] ),
+    store[Country] IN { "canada", "france" },
+    store[StoreKey]=160
+)
+
+
+EVALUATE
+CALCULATETABLE (
+    ALLSELECTED ( Store[Country] ),
+    store[StoreKey]=160
+)
+
+EVALUATE
+CALCULATETABLE (
+    Values ( Store[Country] ),
+    store[Country] IN { "canada", "france" },
+    store[StoreKey]=160
+)

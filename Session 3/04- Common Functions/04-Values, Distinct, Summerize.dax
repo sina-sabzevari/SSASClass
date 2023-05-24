@@ -1,0 +1,29 @@
+﻿
+// Distinct value for a column and return null for invalid relationship
+EVALUATE
+values(Customer[Continent])
+
+
+// Distinct value for a column
+EVALUATE
+DISTINCT(Customer[Continent])
+
+// Distinct value for a column or more
+EVALUATE
+SUMMARIZE(Customer,[Continent],[Country])
+
+
+//Error when work with variable we could use SUMMARIZE instead
+Define VAR __table=Customer
+EVALUATE
+VALUES(__table[Continent])
+
+EVALUATE
+SUMMARIZE(__table,[Continent])
+
+// we can work with table
+Define Table myTable=Customer
+EVALUATE
+VALUES(myTable[Continent])
+
+

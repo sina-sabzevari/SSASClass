@@ -1,0 +1,36 @@
+﻿
+
+
+
+Define MEASURE
+Customer[Average_Age]=AVERAGEX ( Customer, Customer[Age] )
+
+EVALUATE
+ADDCOLUMNS (
+    VALUES ( Customer[Country] ),
+    "Average Age", AVERAGEX ( Customer, Customer[Age] )
+)
+
+EVALUATE
+ADDCOLUMNS (
+    VALUES ( Customer[Country] ),
+    "Average Age", AVERAGEX ( RELATEDTABLE(Customer), Customer[Age] )
+)
+
+
+EVALUATE
+ADDCOLUMNS (
+    VALUES ( Customer[Country] ),
+    "Average Age", CALCULATE(AVERAGEX ( Customer, Customer[Age] ))
+)
+
+
+
+EVALUATE
+ADDCOLUMNS (
+    VALUES ( Customer[Country] ),
+    "Average Age", Customer[Average_Age]
+)
+
+
+

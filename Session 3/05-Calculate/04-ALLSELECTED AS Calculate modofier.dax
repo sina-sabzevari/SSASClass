@@ -1,0 +1,256 @@
+﻿/*
+َALL and ALLSELECTED works th same without filter
+*/
+
+EVALUATE
+ADDCOLUMNS(
+VALUES(store[Country]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[Country])",CALCULATE([Sales Amount],ALLSELECTED(store[Country])),
+"@Sales Amount All(store)",CALCULATE([Sales Amount],ALLSELECTED(store)),
+"@Sales Amount All()",CALCULATE([Sales Amount],ALLSELECTED())
+)
+
+EVALUATE
+ADDCOLUMNS(
+VALUES(store[Country]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[Country])",CALCULATE([Sales Amount],All(store[Country])),
+"@Sales Amount All(store)",CALCULATE([Sales Amount],All(store)),
+"@Sales Amount All()",CALCULATE([Sales Amount],All())
+)
+
+EVALUATE --1: 223908739.691
+{[Sales Amount]}
+
+
+
+EVALUATE --2: 11719299.3332
+
+{CALCULATE([Sales Amount],store[Status]="Closed")}
+
+
+
+EVALUATE --2: 5860019.4788
+
+{CALCULATE([Sales Amount],'Product'[Category]="Audio")}
+
+
+
+
+EVALUATE --2: 364002.2873
+
+{CALCULATE([Sales Amount],'Product'[Category]="Audio",store[Status]="Closed")}
+
+EVALUATE --46067446.1105
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount])
+
+EVALUATE --1157840.8579
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount]),
+'Product'[Category]="Audio")
+
+
+EVALUATE --86833.2007
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount]),
+'Product'[Category]="Audio",store[Status]="Closed")
+
+EVALUATE --364002.2873
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",CALCULATE([Sales Amount],all(Sales[Currency Code]))),
+'Product'[Category]="Audio",store[Status]="Closed")
+
+
+EVALUATE --364002.2873
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",CALCULATE([Sales Amount],all(Sales[Currency Code]))),
+store[Status]="Closed")
+
+EVALUATE  --46067446.1105
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount]),
+Sales[Currency Code]="EUR")
+
+EVALUATE  --3063164.7497
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount]),
+store[Status]="Closed")
+
+
+
+/*
+when filter context apply 
+
+*/
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[Status])",CALCULATE([Sales Amount],All(store[Status])), --CONTEXT Transition
+"@Sales Amount All(store)",CALCULATE([Sales Amount],All(store)), --CONTEXT Transition
+"@Sales Amount All()",CALCULATE([Sales Amount],All()) -- NO FILETER
+),
+store[Status]="Closed"
+)
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount], 
+"@Sales Amount ALLSELECTED(store[state])",CALCULATE([Sales Amount],ALLSELECTED(store[Status])), --shadow filter context for store:store[Status]="Closed" || context transition:Sales[Currency Code]
+"@Sales Amount ALLSELECTED(store)",CALCULATE([Sales Amount],ALLSELECTED(store)), --shadow filter context for store:store[Status]="Closed" || context transition:Sales[Currency Code]
+"@Sales Amount ALLSELECTED()",CALCULATE([Sales Amount],ALLSELECTED()) --shadow filter context:store[Status]="Closed" for all tables || REMOVE context transition:Sales[Currency Code]
+),
+
+store[Status]="Closed"
+)
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[Status])",CALCULATE([Sales Amount],All(store[Status])), --filter context:Audio | context transition:Sales[Currency Code]
+"@Sales Amount All(store)",CALCULATE([Sales Amount],All(store)),--filter context:Audio | context transition:Sales[Currency Code]
+"@Sales Amount All()",CALCULATE([Sales Amount],All()) --NO FILTER
+),
+'Product'[Category]="Audio"
+)
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount], 
+"@Sales Amount ALLSELECTED(store[state])",CALCULATE([Sales Amount],ALLSELECTED(store[Status])), --filter context 'Product'[Category]="Audio" || context transition:Sales[Currency Code]
+"@Sales Amount ALLSELECTED(store)",CALCULATE([Sales Amount],ALLSELECTED(store)), --filter context:Audio | context transition:Sales[Currency Code]
+"@Sales Amount ALLSELECTED()",CALCULATE([Sales Amount],ALLSELECTED()) --shadow filter context:'Product'[Category]="Audio"
+),
+
+'Product'[Category]="Audio"
+)
+
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount], 
+"@Sales Amount ALLSELECTED(store[state])",CALCULATE([Sales Amount],ALLSELECTED(store[Status])), --shadow filter context store[Status]="Closed" || filter context 'Product'[Category]="Audio" || context transition:Sales[Currency Code] 
+"@Sales Amount ALLSELECTED(store)",CALCULATE([Sales Amount],ALLSELECTED(store)), --shadow filter context store[Status]="Closed" || filter context 'Product'[Category]="Audio" || context transition:Sales[Currency Code] 
+"@Sales Amount ALLSELECTED()",CALCULATE([Sales Amount],ALLSELECTED()) --shadow filter context store[Status]="Closed" || filter context 'Product'[Category]="Audio" REMOVE Context Transition
+),
+
+'Product'[Category]="Audio",
+store[Status]="Closed"
+)
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount], 
+"@Sales Amount ALLSELECTED(store[state])",CALCULATE([Sales Amount],ALLSELECTED(store[Status])), --because shadow filter context is active all filters are removed
+"@Sales Amount ALLSELECTED(store)",CALCULATE([Sales Amount],ALLSELECTED(store)), --because shadow filter context is active all filters are removed
+"@Sales Amount ALLSELECTED()",CALCULATE([Sales Amount],ALLSELECTED()) --because shadow filter context is active all filters are removed
+),
+'Product'[Category]="Audio"
+)
+
+
+
+
+/*Salam 2*/
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[state])",CALCULATE([Sales Amount],All(store[State])),--filter context:store[Country]="germany"  || context transition
+"@Sales Amount All(store)",CALCULATE([Sales Amount],All(store)), -- context transition
+"@Sales Amount All()",CALCULATE([Sales Amount],All()) --No filter
+),
+store[Country]="germany"
+)
+
+
+
+
+
+//
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[state])",CALCULATE([Sales Amount],All(store[State])), --filter context:store[Country]="germany"  || context transition ***Germany just return EUR ***
+"@Sales Amount All(store)",CALCULATE([Sales Amount],All(store)), -- context transition
+"@Sales Amount All()",CALCULATE([Sales Amount],All()) --No filter
+),
+store[Country]="germany"
+)
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount ALLSELECTED(store[state])",CALCULATE([Sales Amount],ALLSELECTED(store[State])), --filter context:store[Country]="germany"  || context transition ***Germany just return EUR ***
+"@Sales Amount ALLSELECTED(store)",CALCULATE([Sales Amount],ALLSELECTED(store)), -- context transition
+"@Sales Amount ALLSELECTED()",CALCULATE([Sales Amount],ALLSELECTED()) --No filter
+),
+store[Country]="germany"
+)
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[state])",CALCULATE([Sales Amount],ALLSELECTED(store[State])), --Filter Context: Customer[Continent]="Australia"
+"@Sales Amount All(store)",CALCULATE([Sales Amount],ALLSELECTED(store)), --Filter Context: Customer[Continent]="Australia"
+"@Sales Amount All()",CALCULATE([Sales Amount],ALLSELECTED()) --Shadow Filter context: Customer[Continent]="Australia"
+),
+Customer[Continent]="Australia"
+)
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[state])",CALCULATE([Sales Amount],ALL(store[State])), --Filter Context:Customer[Continent]="Australia" 
+"@Sales Amount All(store)",CALCULATE([Sales Amount],ALL(store)), --Filter Context: Customer[Continent]="Australia"
+"@Sales Amount All()",CALCULATE([Sales Amount],ALL()) --NO FILTER
+),
+Customer[Continent]="Australia"
+)
+
+
+

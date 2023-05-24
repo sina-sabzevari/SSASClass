@@ -1,0 +1,60 @@
+﻿EVALUATE
+ADDCOLUMNS(
+VALUES(Store[Country]),
+"@Sales amount calculate",CALCULATE(SUMX(Sales,Sales[Quantity]*Sales[Unit Price])),
+"@Sales amount relatedtable",SUMX(RELATEDTABLE(Sales),Sales[Quantity]*Sales[Unit Price]),
+"@Sale amount",[Sales Amount]
+)
+
+
+EVALUATE
+ADDCOLUMNS(
+VALUES(Store[Country]),
+"@Sales amount calculate",CALCULATE(SUMX(Sales,Sales[Quantity]*Sales[Unit Price]),'Product'[Color]="Red")
+)
+
+
+EVALUATE
+CALCULATETABLE(
+'Product','Product'[Color]="Red")
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Store[Country]),
+"@Sales amount calculate",CALCULATE(SUMX(Sales,Sales[Quantity]*Sales[Unit Price]),'Product'[Color]="Red")
+),
+'Product'[Color]="black")
+
+
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Store[Country]),
+"@Sales amount calculate",CALCULATE(SUMX(Sales,Sales[Quantity]*Sales[Unit Price]),REMOVEFILTERS('Product'[Color]))
+),
+'Product'[Color]="black")
+
+
+
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Store[Country]),
+"@Sales amount calculate",CALCULATE(SUMX(Sales,Sales[Quantity]*Sales[Unit Price]),KEEPFILTERS('Product'[Color] in {"red","black"}))),
+'Product'[Color]="red")
+
+
+
+
+
+
+
+
+
+
+

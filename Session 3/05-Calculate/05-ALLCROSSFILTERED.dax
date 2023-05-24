@@ -1,0 +1,12 @@
+﻿DEFINE
+    MEASURE ColorGroup[product count] =
+        COUNTROWS ( 'product' )
+
+
+EVALUATE
+ADDCOLUMNS (
+    VALUES ( ColorGroup[color] ),
+    "product count", CALCULATE ( ColorGroup[product count] ),
+    "product count ALL", CALCULATE ( ColorGroup[product count],all('Product') ),
+    "product count ALLCROSSFILTER", CALCULATE ( ColorGroup[product count],ALLCROSSFILTERED('Product') )
+)

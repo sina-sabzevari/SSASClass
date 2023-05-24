@@ -1,0 +1,79 @@
+﻿EVALUATE
+ADDCOLUMNS(
+VALUES(store[Country]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[Country])",CALCULATE([Sales Amount],All(store[Country])),
+"@Sales Amount All(store)",CALCULATE([Sales Amount],All(store)),
+"@Sales Amount All()",CALCULATE([Sales Amount],All())
+)
+
+EVALUATE
+{[Sales Amount]}
+
+EVALUATE
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount])
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount]),
+Sales[Currency Code]="EUR")
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount]),
+store[Country]="germany")
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[Country])",CALCULATE([Sales Amount],All(store[State])),
+"@Sales Amount All(store)",CALCULATE([Sales Amount],All(store)),
+"@Sales Amount All()",CALCULATE([Sales Amount],All())
+),
+store[State]="berlin"
+)
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[Country])",CALCULATE([Sales Amount],All(store[State])),
+"@Sales Amount All(store)",CALCULATE([Sales Amount],All(store)),
+"@Sales Amount All()",CALCULATE([Sales Amount],All())
+),
+store[Country]="germany"
+)
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount]),
+Customer[Continent]="Australia")
+
+
+
+EVALUATE
+CALCULATETABLE(
+ADDCOLUMNS(
+VALUES(Sales[Currency Code]),
+"@Sales Amount",[Sales Amount],
+"@Sales Amount All(store[Country])",CALCULATE([Sales Amount],All(store[State])),
+"@Sales Amount All(store)",CALCULATE([Sales Amount],All(store)),
+"@Sales Amount All()",CALCULATE([Sales Amount],All())
+),
+Customer[Continent]="Australia"
+)
+
+

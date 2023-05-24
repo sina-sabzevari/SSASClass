@@ -1,0 +1,46 @@
+﻿--  TOPN retrieves the top N items from a table after sorting
+--  them by the result of the third argument.
+--  Multiple sorting criteria can be provided in further parameters.
+EVALUATE
+    TOPN (
+        3,
+        ADDCOLUMNS (
+            VALUES ( 'Product'[Product Name] ),
+            "@Sales Amount", [Sales Amount]
+        ),
+        [@Sales Amount],
+        DESC
+    )
+ORDER BY [@Sales Amount] DESC
+
+
+
+
+
+--  TOPN might return more than the requested rows in presence of ties.
+EVALUATE
+    TOPN (
+        3,
+        ADDCOLUMNS (
+            VALUES ( 'Product'[Product Name] ),
+            "@Sales Amount Round", MROUND ( [Sales Amount], 50000 ),
+            "@Sales Amount",[Sales Amount]
+        ),
+        [@Sales Amount Round]
+    )
+ORDER BY [@Sales Amount Round] DESC
+
+
+
+
+--  TOPNSKIP quickly retrieves rows from a table, skipping a 
+--  certain number of rows.
+--  Mainly used when browsing a table through certains UI.
+EVALUATE
+TOPNSKIP (
+    5,                          -- Rows to return
+    6,                          -- Rows to skip
+    'Product',                  -- Table
+    'Product'[Product Name],    -- Sort order
+    ASC                         -- Sort direction
+)

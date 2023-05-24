@@ -1,0 +1,14 @@
+﻿EVALUATE
+ADDCOLUMNS (
+    VALUES ( 'Date'[Year]), --order date
+    "Sales AMount", [Sales Amount] 
+)
+
+EVALUATE
+ADDCOLUMNS (
+    VALUES ( 'Date'[Year]), --deliver date
+    "Sales Amount", CALCULATE ( [Sales Amount],USERELATIONSHIP(sales[Order Date],'Date'[Date] )))
+    
+    
+    
+    

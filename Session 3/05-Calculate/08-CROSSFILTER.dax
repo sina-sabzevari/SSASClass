@@ -1,0 +1,10 @@
+﻿EVALUATE
+ADDCOLUMNS (
+    VALUES ( Store[Name] ),
+    "Product Count", CALCULATE ( COUNTROWS ( 'Product' ) ),
+    "Product Count CROSSFilter",
+        CALCULATE (
+            COUNTROWS ( 'Product' ),
+            CROSSFILTER ( Sales[ProductKey],'Product'[ProductKey], BOTH )
+        )
+)

@@ -1,0 +1,20 @@
+﻿
+--  UNION keeps the data lineage only if all its arguments share
+--  the same data lineage
+DEFINE
+VAR Days        = VALUES ( 'Date'[Day of Week] )
+VAR WeekendDays = { "Saturday", "Sunday" }
+VAR UnionDays   = UNION ( Days, WeekendDays )
+MEASURE Sales[Sales Amount]=SUMX(Sales,Sales[Quantity]*Sales[Unit Price])
+ 
+EVALUATE
+    ADDCOLUMNS (
+        Days,
+        "Sales Amount", [Sales Amount]
+    )
+     
+EVALUATE
+    ADDCOLUMNS (
+        UnionDays,
+        "Sales Amount", [Sales Amount]
+    )

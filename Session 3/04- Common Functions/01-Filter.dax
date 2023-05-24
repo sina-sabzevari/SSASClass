@@ -1,0 +1,36 @@
+﻿EVALUATE
+FILTER ( Customer, Customer[Continent] = "Europe" )
+
+
+EVALUATE
+FILTER(Customer,Customer[Country]="Canada" || Customer[Country]="France")
+
+EVALUATE
+FILTER(Customer,Customer[Country] in {"Canada", "France"})
+
+
+
+
+EVALUATE
+VAR __Customer=FILTER(Customer,Customer[Country] in {"Canada", "France"})
+VAR __Result=COUNTROWS(__Customer)
+RETURN {__Result}
+
+
+EVALUATE
+FILTER('Product','Product'[Brand]="Contoso" && 'Product'[color]="Red")
+
+
+EVALUATE
+FILTER(
+FILTER('Product','Product'[Brand]="Contoso"),
+'Product'[color]="Red")
+
+
+EVALUATE
+FILTER('Product','Product'[color]="Red" && 'Product'[Brand]="Contoso")
+
+EVALUATE
+FILTER(
+FILTER('Product','Product'[color]="Red"),
+'Product'[Brand]="Contoso")

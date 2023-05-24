@@ -1,0 +1,11 @@
+﻿EVALUATE
+ADDCOLUMNS ( Sales, "Sales Quantity", Sales[Quantity] * Sales[Unit Price] )
+
+
+EVALUATE
+ADDCOLUMNS(Sales,"Sales Amount",Sales[Quantity]* Sales[Unit Price],"Net Sales Amount",Sales[Quantity]*Sales[net Price])
+
+
+
+
+

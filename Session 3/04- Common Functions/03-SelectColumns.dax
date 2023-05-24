@@ -1,0 +1,5 @@
+﻿Define 
+VAR __Sales=ADDCOLUMNS(Sales,"@Sales_Amount",Sales[Quantity]* Sales[Unit Price],"@Net_Sales_Amount",Sales[Quantity]*Sales[net Price])
+
+EVALUATE
+SELECTCOLUMNS(__Sales,[order number],Sales[Quantity],Sales[Unit Price],Sales[net Price],[@Sales_Amount],[@Net_Sales_Amount])

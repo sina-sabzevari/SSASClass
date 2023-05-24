@@ -1,0 +1,22 @@
+﻿//must be direct from parent(dim) to Child(fact)
+//must be Measure
+
+DEFINE
+MEASURE Customer[Customer Count]=CALCULATE(COUNTROWS(Customer),TREATAS(VALUES(AgeGroup[Age]),Customer[Age]))
+
+EVALUATE
+ADDCOLUMNS(
+VALUES(AgeGroup[GroupName]),
+"Customer Count",Customer[Customer Count])
+
+
+EVALUATE
+ADDCOLUMNS(
+VALUES(AgeGroup[GroupName]),
+"Customer Count",Customer[Customer Count])
+
+
+
+
+
+

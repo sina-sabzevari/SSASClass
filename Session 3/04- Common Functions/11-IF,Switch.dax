@@ -1,0 +1,21 @@
+﻿EVALUATE
+ADDCOLUMNS (
+    SUMMARIZE ( Customer, Customer[Gender], Customer[Age] ),
+    "Persian Gender if", IF ( Customer[Gender] = "Female","F","M"  ),
+    "Age Group IF",
+        IF (
+            Customer[Age] < 30,
+            "young",
+            IF ( Customer[Age] < 60, "Middle age", "Old" )
+        )
+)
+
+
+
+EVALUATE
+ADDCOLUMNS (
+    SUMMARIZE ( Customer, Customer[Gender], Customer[Age] ),
+    "Persian Gender swith", SWITCH ( Customer[Gender], "Female", "F", "M" ),
+     "Age Group Swith",
+     SWITCH(TRUE(),Customer[Age]<30,"young",Customer[Age]<60,"Middle Age","Old")
+)

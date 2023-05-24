@@ -1,0 +1,21 @@
+﻿DEFINE
+    MEASURE Sales[Sale Quantity] =
+        SUM ( Sales[Quantity] )
+    TABLE myTable =
+        DATATABLE (
+            "Continent", STRING,
+            {
+                { "North America" },
+                { "Australia" },
+                { "Europe" }
+            }
+        )
+
+EVALUATE
+ADDCOLUMNS (
+    VALUES ( 'Customer'[Continent] ),
+    "Sales Amount", Sales[Sale Quantity]
+)
+
+EVALUATE
+ADDCOLUMNS ( myTable, "Sales Amount", Sales[Sale Quantity] )

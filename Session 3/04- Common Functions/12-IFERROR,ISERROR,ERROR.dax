@@ -1,0 +1,22 @@
+﻿
+
+EVALUATE
+VAR _number = -10
+RETURN
+{
+    IFERROR ( SQRT ( _number ), "error" ),
+    IF ( _number < 0, "error", SQRT ( _number ) ),
+    IF ( ISERROR ( SQRT ( _number ) ), "error", SQRT ( _number ) )
+    
+}
+
+
+
+EVALUATE
+VAR _number = -10
+RETURN
+{
+    IF ( ISERROR ( SQRT ( _number ) ), ERROR("error123"), SQRT ( _number ) )
+    
+}
+

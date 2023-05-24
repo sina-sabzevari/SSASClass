@@ -1,0 +1,25 @@
+﻿--  INTERSECT performs set intersection: the second parameter rows 
+--  are intersected with the first.
+--  INTERSECT keeps the data lineage of its first argument only.
+DEFINE
+
+VAR Days         = VALUES ( 'Date'[Day of Week] )
+VAR WeekendDays  = { "Saturday", "Sunday" }
+VAR DaysWeekends = INTERSECT ( Days, WeekendDays )
+VAR WeekendsDays = INTERSECT ( WeekendDays, Days )
+ 
+EVALUATE DaysWeekends
+ 
+EVALUATE
+ADDCOLUMNS (
+    DaysWeekends,
+    "Sales Amount", [Sales Amount]
+)
+ 
+--  In this last result, the data lineage is from WeekendDays, which does not
+--  filter the Sales table and the Sales Amount measure.
+EVALUATE
+ADDCOLUMNS (
+    WeekendsDays,
+    "Sales Amount", [Sales Amount]
+)

@@ -1,0 +1,11 @@
+﻿--  EXCEPT keeps the data lineage of its first argument only.
+
+EVALUATE
+VAR Days        = VALUES ( 'Date'[Day of Week] )
+VAR WeekendDays = { "Saturday", "Sunday" }
+VAR WorkingDays = EXCEPT ( Days, WeekendDays )
+RETURN
+    ADDCOLUMNS (
+        WorkingDays,
+        "Sales Amount", [Sales Amount]
+    )
