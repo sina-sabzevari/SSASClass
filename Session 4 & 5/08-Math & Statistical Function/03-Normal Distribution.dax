@@ -1,0 +1,22 @@
+﻿DEFINE
+    TABLE SampleData    = { 2, 4, 4, 4, 5, 5, 7, 9 }
+    VAR Mean            = AVERAGE ( SampleData[Value] )
+    VAR StandardDev     = STDEV.S ( SampleData[Value] )
+    VAR Vals            = GENERATESERIES ( 0.0, 10, 0.5 )
+    VAR CumulativeTrue  = TRUE   -- Cumulative distribution function
+    VAR CumulativeFalse = FALSE  -- Probability density function
+EVALUATE
+ADDCOLUMNS (
+    Vals,
+    "Normal Distr.",             -- Probability density function
+        FORMAT (
+            NORM.DIST ( [Value], Mean, StandardDev, CumulativeFalse ),
+            "#,0.00000"
+        ),
+    "Normal Distr. Cumulative",  -- Cumulative distribution function
+        FORMAT (
+            NORM.DIST ( [Value], Mean, StandardDev, CumulativeTrue ),
+            "#,0.00000"
+        )
+       
+)

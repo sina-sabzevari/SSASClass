@@ -1,0 +1,22 @@
+﻿// we should have the same data lineage
+// all column with the same names are used as key for join
+DEFINE
+VAR _customer=SELECTCOLUMNS(VALUES(Customer[Country]),"Country",[Country] & "","@CustomerCount",CALCULATE(COUNTROWS(Customer))) --break data lineage
+VAR _store=SELECTCOLUMNS(VALUES(Store[Country]),"Country",[Country] & "","@storeCount",CALCULATE(COUNTROWS(store))) --break data lineage
+
+EVALUATE
+_customer
+
+EVALUATE
+_store
+
+EVALUATE
+NATURALINNERJOIN(_customer,_store)
+
+
+
+EVALUATE
+NATURALLEFTOUTERJOIN(_customer,_store)
+
+EVALUATE
+NATURALLEFTOUTERJOIN(_store,_customer)

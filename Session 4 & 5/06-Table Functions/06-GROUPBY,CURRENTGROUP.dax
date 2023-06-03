@@ -1,0 +1,55 @@
+﻿--  GROUPBY is useful to group by columns with no lineage
+--  Each column added by GROUPBY must iterate CURRENTGROUP(). 
+--  Moreover, you cannot use CALCULATE inside
+--  a GROUPBY iteration.
+DEFINE
+VAR AverageCustomerSales =
+    AVERAGEX ( Customer, [Sales Amount] )
+VAR TaggedCustomers =
+    SUMMARIZECOLUMNS (
+        Customer[CustomerKey],
+        "Customer Category",
+            IF ( [Sales Amount] >= AverageCustomerSales, "Above Average", "Below Average" )
+    )
+VAR Result =
+    GROUPBY (
+        TaggedCustomers,     --table
+        [Customer Category], --Group by Column
+        "# Customers", COUNTX ( CURRENTGROUP (), 1 ) --expression
+    )
+EVALUATE
+    Result
+    
+--Max of average price of each subcategory per category    
+EVALUATE
+ADDCOLUMNS (
+    VALUES ( 'Product'[Category] ),
+    "Max SubCat Avg Price", CALCULATE (
+        MAXX (
+            ADDCOLUMNS (
+                SUMMARIZE (
+                    Product,
+                    'Product'[Category],
+                    'Product'[Subcategory]
+                ),
+                "Average Price", CALCULATE ( AVERAGE ( Product[Unit Price] ) )
+            ),
+            [Average Price]
+        )
+    )
+)
+
+
+EVALUATE
+GROUPBY (
+    ADDCOLUMNS (
+        SUMMARIZE( 
+            Product,
+            'Product'[Category],
+            'Product'[Subcategory]
+        ),
+        "Average Price", CALCULATE (AVERAGE(  Product[Unit Price] ) )
+    ),
+    'Product'[Category],
+    "Max SubCat Avg Price", MAXX ( CURRENTGROUP (), [Average Price] )
+)

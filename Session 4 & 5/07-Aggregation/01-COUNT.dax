@@ -1,0 +1,19 @@
+﻿EVALUATE
+ROW(
+"Count",COUNTROWS('Date'),
+"CountA",COUNTA('Date'[Working Day]),
+"Count with sum",COUNTX('Date','Date'[Working Day]*1)
+)
+
+EVALUATE
+VALUES(Store[Status])
+
+EVALUATE
+ROW(
+"COUNTROWS",COUNTROWS(Store),
+"COUNT",COUNT(Store[Status]),
+"COUNTBLANK",COUNTBLANK(Store[Status]),
+"DISTINCTCOUNT",DISTINCTCOUNT(Store[Status]),
+"DISTINCTCOUNTNOBLANK",DISTINCTCOUNTNOBLANK(Store[Status])
+
+)

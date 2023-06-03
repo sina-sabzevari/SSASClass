@@ -1,0 +1,34 @@
+﻿--  If the second argument returns an empty table, GENERATE skips the row.
+--  GENERATEALL returns ALL the rows of the first argument, even 
+--  though the second expression returns an empty table.
+--  GENERATE is similar to CROSS APPLY in SQL
+--  GENERATEALL is similar to OUTER APPLY in SQL
+DEFINE
+    VAR _alpha =
+        DATATABLE ( "name", STRING, { { "a" }, { "b" }, { "c" } } )
+    VAR _number =
+        DATATABLE ( "number", STRING, { { "1" }, { "2" }, { "3" } } )
+    VAR Dates =
+        UNION (
+            ROW ( "FirstDate", DATE ( 2017, 1, 6 ), "LastDate", DATE ( 2017, 1, 3 ) ),
+            ROW ( "FirstDate", DATE ( 2017, 1, 9 ), "LastDate", DATE ( 2017, 1, 12 ) )
+        )
+    VAR DatesExpanded =
+        GENERATE ( Dates, DATESBETWEEN ( 'Date'[Date], [FirstDate], [LastDate] ) )
+    VAR DatesExpandedAll =
+        GENERATEALL ( Dates, DATESBETWEEN ( 'Date'[Date], [FirstDate], [LastDate] ) )
+
+EVALUATE
+CROSSJOIN ( _alpha, _number )
+
+EVALUATE
+GENERATE ( _alpha, _number )
+
+EVALUATE
+Dates
+
+EVALUATE
+DatesExpanded
+
+EVALUATE
+DatesExpandedAll

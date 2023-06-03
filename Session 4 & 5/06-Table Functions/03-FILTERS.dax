@@ -1,0 +1,35 @@
+﻿--  FILTER returns the filters directly applied to a column
+EVALUATE
+CALCULATETABLE (
+    FILTERS ( 'Product'[Category] ),
+    'Product'[Category] = "Audio"
+)
+ 
+EVALUATE
+CALCULATETABLE (
+    FILTERS ( 'Product'[Category] ),
+    'Product'[Category] IN { "Audio", "Computers" }
+)
+
+
+--  Filter on one column does not affect other columns,
+--  which are cross-filtered but not filtered.
+--  Only "Cameras and camcorders" has products with Azure color.
+EVALUATE
+CALCULATETABLE (
+    FILTERS ( 'Product'[Category] ),
+    'Product'[Color] = "Azure"
+)
+ 
+EVALUATE
+CALCULATETABLE (
+    VALUES ( 'Product'[Category] ),
+    'Product'[Color] = "Azure"
+)
+ 
+--  Table filter include columns used in FILTERS
+EVALUATE
+CALCULATETABLE (
+    FILTERS ( 'Product'[Category] ),
+    FILTER ( 'Product', 'Product'[Color] = "Azure" )
+)

@@ -1,0 +1,23 @@
+﻿DEFINE
+TABLE _base=
+ADDCOLUMNS(
+GENERATESERIES(1,50,1)
+,"@Number",RAND()*100,
+"@WholeNumber",INT(RAND()*100))
+
+EVALUATE
+ADDCOLUMNS(
+_base,
+"FLOOR",FLOOR([@number],0.01),
+"CEILING",CEILING([@number],0.01),
+"TRUNC",TRUNC([@number],2),
+"ROUNDDOWN",ROUNDDOWN([@number],2),
+"ROUNDUP",ROUNDUP([@number],2),
+"INT",INT([@number]),
+"MROUND",MROUND([@number],10),
+"DIVIDE",DIVIDE([@WholeNumber],7),
+"MOD",MOD([@WholeNumber],7),
+"POWER",[@WholeNumber]^2,
+"POWER 2",POWER([@WholeNumber],2)
+
+)

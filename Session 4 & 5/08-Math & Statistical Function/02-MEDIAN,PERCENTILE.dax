@@ -1,0 +1,22 @@
+﻿DEFINE
+    TABLE SampleData = { 2, 4, 4, 4, 5, 5, 7, 9 }
+EVALUATE
+{
+     ( "AVERAGE",  AVERAGE ( SampleData[Value] ) ),
+     ( "MEDIAN",   MEDIAN ( SampleData[Value] ) ),
+     ( "MEDIANX",  MEDIANX ( SampleData, SampleData[Value] ) ),
+     ( "Average Sales", AVERAGEX ( Sales, Sales[Quantity] * Sales[Net Price] ) ),
+     ( "Median Sales", MEDIANX ( Sales, Sales[Quantity] * Sales[Net Price] ) )
+}
+--  MEDIAN corresponds to PERCENTILE.INC with k=0.50
+EVALUATE
+{
+     ( "AVERAGE",  AVERAGE ( SampleData[Value] ) ),
+     ( "MEDIAN",   MEDIAN ( SampleData[Value] ) ),
+     ( "PERCENTILE.EXC 0.25",  PERCENTILE.EXC ( SampleData[Value], 0.25 ) ),
+     ( "PERCENTILE.INC 0.25",  PERCENTILE.INC ( SampleData[Value], 0.25 ) ),
+     ( "PERCENTILE.EXC 0.50",  PERCENTILE.EXC ( SampleData[Value], 0.50 ) ),
+     ( "PERCENTILE.INC 0.50",  PERCENTILE.INC ( SampleData[Value], 0.50 ) ),
+     ( "PERCENTILE.EXC 0.75",  PERCENTILE.EXC ( SampleData[Value], 0.75 ) ), --K*(N+1)   0.75*(8+1)=6.75   SampleData[6]=5  SampleData[7]=7 Sample[6.75]=6.5
+     ( "PERCENTILE.INC 0.75",  PERCENTILE.INC ( SampleData[Value], 0.75 ) ) --K*(N-1)+1   0.75*(8-1)+1=6.25 SampleData[6]=5  SampleData[7]=7 Sample[6.25]=5.5
+}

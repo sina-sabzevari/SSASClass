@@ -1,0 +1,10 @@
+﻿--  GENERATESERIES returns a list of values given the first
+--  value, the last and the step.
+EVALUATE
+    GENERATESERIES ( 1, 10, 1 )
+     
+EVALUATE
+    GENERATESERIES ( 5, 20, 5 )
+     
+EVALUATE
+    GENERATESERIES ( 0, 1, 0.1 )

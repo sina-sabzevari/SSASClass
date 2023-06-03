@@ -1,0 +1,12 @@
+﻿EVALUATE
+ADDCOLUMNS(
+SUMMARIZE(
+'Product',
+'Product'[Category],
+'Product'[Subcategory],
+'Product'[Product Name]),
+"@Rank",RANKX(ALL('Product'),[sales amount]),
+"@RankInCategory",RANKX(ALLEXCEPT('Product','Product'[Category]),[Sales Amount]),
+"@RankInSubcategory",RANKX(ALLEXCEPT('Product','Product'[Subcategory]),[Sales Amount])
+)
+ORDER BY 'Product'[category],'Product'[Subcategory],[@RankInSubcategory]

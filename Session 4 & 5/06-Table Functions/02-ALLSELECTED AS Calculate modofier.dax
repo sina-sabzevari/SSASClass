@@ -1,0 +1,34 @@
+﻿
+
+EVALUATE
+SUMMARIZECOLUMNS ( 
+	'Product'[Color],
+	"Sales Amount", [Sales Amount] )
+
+EVALUATE
+SUMMARIZECOLUMNS (
+    'Product'[Color],
+    "Sales Amount AllSelected Product Color", CALCULATE ( [Sales Amount], ALLSELECTED ( 'Product'[Color] ) )
+)
+
+
+EVALUATE
+SUMMARIZECOLUMNS(
+	'Product'[Color],
+	TREATAS({"Germany"},Customer[Country]),
+	"Sales Amount",CALCULATE([Sales Amount],ALLSELECTED('Product'[Color]))
+	)
+	
+
+EVALUATE
+SUMMARIZECOLUMNS ( 
+	'Product'[Color],
+	TREATAS({"Silver"},'Product'[Color]),	
+	"Sales Amount", [Sales Amount] )
+
+EVALUATE
+SUMMARIZECOLUMNS(
+	'Product'[Color],
+	TREATAS({"Silver"},'Product'[Color]),
+	"Sales Amount",CALCULATE([Sales Amount],ALLSELECTED('Product'[Color]))
+	)	

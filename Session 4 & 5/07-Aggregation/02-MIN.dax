@@ -1,0 +1,18 @@
+﻿DEFINE
+VAR _table=SUMMARIZECOLUMNS(Store[Country],"@SalesAmount",[Sales Amount])
+
+EVALUATE
+ROW(
+"Country",MINX(_table,[@SalesAmount])
+)
+
+//EVALUATE
+//ROW(_table[@SalesAmount])
+
+EVALUATE
+{
+MROUND([Sales Amount],100000000),
+min(1,10),
+min(30000000,[Sales Amount])
+}
+

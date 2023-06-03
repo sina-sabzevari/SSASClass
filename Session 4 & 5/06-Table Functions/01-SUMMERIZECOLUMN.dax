@@ -1,0 +1,161 @@
+﻿--simple SUMMARIZECOLUMNS
+EVALUATE
+SUMMARIZECOLUMNS (
+     'Product'[Category] ,
+    "Sales Amount", [Sales Amount],
+    "Sales Count",COUNTROWS(Sales)
+)
+--muliple column
+EVALUATE
+SUMMARIZECOLUMNS (
+     'Product'[Category] ,'Date'[Year],
+    "Sales Amount", [Sales Amount],
+    "Sales Count",COUNTROWS(Sales)
+)
+--Filter
+EVALUATE
+SUMMARIZECOLUMNS (
+     'Product'[Category] ,'Date'[Year],
+     FILTER('Date','Date'[Year] in {2010,2020}),
+    "Sales Amount", [Sales Amount],
+    "Sales Count",CALCULATE(COUNTROWS(Sales))
+    )
+--Treatas
+EVALUATE
+SUMMARIZECOLUMNS (
+     'Product'[Category] ,'Date'[Year],
+     TREATAS({"2010","2020"},'Date'[Year]),
+    "Sales Amount", [Sales Amount],
+    "Sales Count",COUNTROWS(Sales)
+)
+-- ROLLUPADDISSUBTOTAL
+
+EVALUATE
+SUMMARIZECOLUMNS (
+     ROLLUPADDISSUBTOTAL('Product'[Category],"IsTotal") ,
+     TREATAS( {"Audio","TV and Video","Computers"},'Product'[Category]),
+    "Sales Amount", [Sales Amount],
+    "Sales Count",COUNTROWS(Sales)
+)
+-- ROLLUPADDISSUBTOTAL muliple columns
+EVALUATE
+SUMMARIZECOLUMNS (
+    ROLLUPADDISSUBTOTAL (  'Date'[Year],"is All year", 'Date'[Month Number] , "Is All month"  ),
+    "SumQuantity", SUM ( 'Sales'[Quantity] )
+)
+order by [year] ASC,[month number] ASC
+
+-- ROLLGROUP
+EVALUATE
+SUMMARIZECOLUMNS (
+    ROLLUPADDISSUBTOTAL ( ROLLUPGROUP ( 'Date'[Year],'Date'[Month Number]) , "Is total" ),
+    "SumQuantity", SUM ( 'Sales'[Quantity] )
+)
+order by [year] ASC,[month number] ASC
+--RollGroup multiple
+EVALUATE
+SUMMARIZECOLUMNS(
+ROLLUPADDISSUBTOTAL('Date'[Year],"YearTotal"),
+ROLLUPADDISSUBTOTAL('Date'[Month Number],"MonthTotal"),
+      "SumQuantity", SUM('Sales'[Quantity]))
+order by [year] ASC,[month number] ASC    
+    
+-- muliple ROLLUPADDISSUBTOTAL      
+EVALUATE
+SUMMARIZECOLUMNS (
+    ROLLUPADDISSUBTOTAL ( 'Product'[Category], "IsCategoryTotal" ),
+    ROLLUPADDISSUBTOTAL (
+        ROLLUPGROUP (  Customer[Continent], Customer[Country] ),
+        "IsTotalcountry"
+    ),
+    "Sales Amount", [Sales Amount]
+)    
+ 
+// ADDMISSINGITEMS   
+EVALUATE
+ADDMISSINGITEMS(
+   'Date'[Year],
+    'Date'[Month number],
+SUMMARIZECOLUMNS (
+
+     'Date'[Year],
+     'Date'[Month number],
+    "Sales Amount", [Sales Amount]
+),
+     'Date'[Year]
+     ,'Date'[Month number])
+order by [year] ASC,[month number] ASC  
+
+
+
+// ADDMISSINGITEMS   
+EVALUATE
+ADDMISSINGITEMS(
+	'Date'[Year]
+	,'Date'[Month Number]
+	,SUMMARIZECOLUMNS(
+		ROLLUPADDISSUBTOTAL(
+			'Date'[Year],
+			"IsYearTotal",
+			'Date'[Month Number],
+			"IsMonthTotal"
+			),
+			"Amount",[Sales Amount]
+			),
+			'Date'[Year],
+			'Date'[Month Number]
+			)
+			
+
+// The function does not return a value. It only marks a subset of columns to ADDMISSINGITEMS.   
+EVALUATE
+ADDMISSINGITEMS(
+	'Date'[Year]
+	,'Date'[Month Number]
+	,SUMMARIZECOLUMNS(
+		ROLLUPADDISSUBTOTAL(
+			'Date'[Year],
+			"IsYearTotal",
+			'Date'[Month Number],
+			"IsMonthTotal"
+			),
+			"Amount",[Sales Amount]
+			),
+			ROLLUPISSUBTOTAL(
+			'Date'[Year],
+			[IsYearTotal],
+			'Date'[Month Number],
+			[IsMonthTotal]
+			))
+
+--  NONVISUAL marks a SUMMARIZECOLUMNS filter so that it does
+--  not affect measures using ALLSELECTED as part of their
+--  calculation.
+
+EVALUATE
+SUMMARIZECOLUMNS (
+     'Product'[Category] ,
+    TREATAS( {"Audio","TV and Video","Computers"},'Product'[Category]),
+    "Sales Amount", CALCULATE([Sales Amount],ALLSELECTED('Product'[Category]))
+   
+    )   
+    
+EVALUATE
+SUMMARIZECOLUMNS (
+     'Product'[Category] ,
+     NONVISUAL(TREATAS( {"Audio","TV and Video","Computers"},'Product'[Category])),
+    "Sales Amount", CALCULATE([Sales Amount],ALLSELECTED('Product'[Category]))
+   
+    )
+    
+ 
+
+//Tags a measure expression specified in the call to SUMMARIZECOLUMNS function to be ignored when determining the non-blank rows
+EVALUATE
+    SUMMARIZECOLUMNS (
+        'Date'[Year],
+        'Date'[Month],
+        "Sales Amount", IGNORE(SUMX ( Sales, Sales[Quantity] * Sales[Unit Price] ))
+    )
+ORDER BY         'Date'[Year],
+        'Date'[Month]
