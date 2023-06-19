@@ -1,0 +1,81 @@
+﻿--  FORMAT accepts a set of predefined format strings for Date/Time
+DEFINE
+    VAR D  = DATE ( 2021, 1, 2 )
+    VAR T  = TIME ( 15, 30, 0 )
+    VAR DT = D + T
+    
+EVALUATE
+{
+    ( "Percent",      FORMAT (                0.742, "Percent" )        ),
+    ( "Currency (1)", FORMAT (             1234.567, "$#,0.00" )        ),
+    ( "Currency (2)", FORMAT (             1234.567, """US$"" #,0.00" ) ),
+    ( "Date (1)",     FORMAT ( DATE ( 2019, 3, 28 ), "yyyy-mm-dd" )     ),
+    ( "Date (2)",     FORMAT ( DATE ( 2019, 3, 28 ), "m/d/yy" )         ),
+    ( "Date (Q)",     FORMAT ( DATE ( 2019, 3, 28 ), "\QQ yyyy" )       )
+}
+
+--  FORMAT accepts a set of predefined format strings to format numbers
+EVALUATE
+{
+    ( "General Number",  FORMAT( 12345.67, "General Number" )  ),
+    ( "Currency"      ,  FORMAT( 12345.67, "Currency"       )  ),
+    ( "Fixed"         ,  FORMAT( 12345.67, "Fixed"          )  ),
+    ( "Standard"      ,  FORMAT( 12345.67, "Standard"       )  ),
+    ( "Percent"       ,  FORMAT( 12345.67, "Percent"        )  ),
+    ( "Scientific"    ,  FORMAT( 12345.67, "Scientific"     )  ),
+    ( "True/False"    ,  FORMAT( TRUE,     "True/False"     )  ),
+    ( "On/Off"        ,  FORMAT( FALSE,    "On/Off"         )  ),
+    ( "Yes/No"        ,  FORMAT( TRUE,     "Yes/No"         )  )
+}
+
+
+
+
+EVALUATE
+{
+    ( "General Date",  FORMAT ( DT, "General Date" ) ),
+    ( "Long Date"   ,  FORMAT ( DT, "Long Date"    ) ),
+    ( "Medium Date" ,  FORMAT ( DT, "Medium Date"  ) ),
+    ( "Short Date"  ,  FORMAT ( DT, "Short Date"   ) ),
+    ( "Long Time"   ,  FORMAT ( DT, "Long Time"    ) ),
+    ( "Medium Time" ,  FORMAT ( DT, "Medium Time"  ) ),
+    ( "Short Time"  ,  FORMAT ( DT, "Short Time"   ) )
+}
+
+EVALUATE
+{
+    ( "m"      ,  FORMAT ( D, "m"      ) ),    -- 1 or 2 digits 
+    ( "mm"     ,  FORMAT ( D, "mm"     ) ),    -- always 2 digits
+    ( "mmm"    ,  FORMAT ( D, "mmm"    ) ),    -- short day of month
+    ( "mmmm"   ,  FORMAT ( D, "mmmm"   ) )     -- long day of month
+}
+
+EVALUATE
+{
+    ( "d"      ,  FORMAT ( D, "d"      ) ),    -- 1 or 2 digits
+    ( "dd"     ,  FORMAT ( D, "dd"     ) ),    -- always 2 digits
+    ( "ddd"    ,  FORMAT ( D, "ddd"    ) ),    -- short day of week
+    ( "dddd"   ,  FORMAT ( D, "dddd"   ) ),    -- long day of week
+    ( "ddddd"  ,  FORMAT ( D, "ddddd"  ) ),    -- short date
+    ( "dddddd" ,  FORMAT ( D, "dddddd" ) )     -- long date
+}
+
+
+-- The third optional argument specifies the locale identifier
+EVALUATE {
+    FORMAT( dt"2020-12-15T12:30:59", BLANK(), "en-US" ),
+    FORMAT( dt"2020-12-15T12:30:59", BLANK(), "fa-IR" ), 
+    FORMAT( dt"2020-12-15", "dd mmmm yyyy ", "fa-IR" )
+}
+
+
+EVALUATE
+VAR BigNumber = 103456789102
+RETURN
+    {
+        FORMAT ( BigNumber, "$#,0" ),         -- Units
+        FORMAT ( BigNumber, "$#,0,.0#K" ),    -- Thousand
+        FORMAT ( BigNumber, "$#,0,,.0#M" ),   -- Million
+        FORMAT ( BigNumber, "$#,0,,,.0#B" ),  -- Billion
+        FORMAT ( BigNumber, "$#,0,,,,.0#T" )  -- Trillion
+    }

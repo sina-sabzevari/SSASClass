@@ -1,0 +1,21 @@
+﻿DEFINE
+    MEASURE Sales[PY Sales SAMEPERIODLASTYEAR] =
+        CALCULATE ( [Sales Amount], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+    MEASURE Sales[PY Sales DATEADD] =
+        CALCULATE ( [Sales Amount], DATEADD ( 'Date'[Date], -1, YEAR ) )
+    MEASURE Sales[PY Sales PARALLELPERIOD] =
+        CALCULATE ( [Sales Amount], PARALLELPERIOD ( 'Date'[Date], -1, YEAR ) )
+
+EVALUATE
+SUMMARIZECOLUMNS (
+    ROLLUPADDISSUBTOTAL (
+        ROLLUPGROUP ( 'Date'[Year] ),
+        "IsYear",
+        ROLLUPGROUP('Date'[month], 'Date'[Year Month Number]),"IsTotal" 
+    ),
+    "@SalesAmount", [Sales Amount],
+    "PY Sales SAMEPERIODLASTYEAR", Sales[PY Sales SAMEPERIODLASTYEAR],
+    "PY Sales DATEADD", Sales[PY Sales DATEADD],
+    "PY Sales PARALLELPERIOD", Sales[PY Sales PARALLELPERIOD]
+)
+ORDER BY [Year Month Number],[year]

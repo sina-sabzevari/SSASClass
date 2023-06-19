@@ -1,0 +1,8 @@
+﻿DEFINE TABLE _table=GENERATESERIES(1,20000,1)
+
+EVALUATE
+
+ADDCOLUMNS(_table,"uni",IFERROR(UNICHAR(_table[Value]),"1"))
+
+
+

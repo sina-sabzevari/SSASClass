@@ -1,0 +1,26 @@
+﻿DEFINE
+
+    MEASURE Sales[Sales Amount YTD] =
+        VAR LastVisibleDate =
+        MAX ( 'Date'[Date] )
+    VAR CurrentYear =
+        YEAR ( LastVisibleDate )
+    VAR SetOfDatesYtd =
+        FILTER (
+            VALUES ( 'Date'[Date] ),
+            AND ( 'Date'[Date] <= LastVisibleDate, YEAR ( 'Date'[Date] ) = CurrentYear )
+        )
+    RETURN
+    CALCULATE ( SUMX(Sales,Sales[Quantity]*Sales[Unit Price]), SetOfDatesYtd )
+    MEASURE Sales[Sales Amount YTD DATESYTD]=CALCULATE([Sales Amount],DATESYTD('Date'[Date]))
+    MEASURE Sales[Sales Amount YTD TOTALYTD]=TOTALYTD([Sales Amount],'Date'[Date])
+
+EVALUATE
+ADDCOLUMNS (
+    SUMMARIZE ( 'Date', 'Date'[Year], 'Date'[month], 'Date'[Year Month Number] ),
+    "@SalesAmount", [Sales Amount],
+    "@SalesAmountYTD", CALCULATE([Sales Amount YTD]),
+    "@Sales Amount YTD DATESYTD",Sales[Sales Amount YTD DATESYTD],
+    "Sales Amount YTD TOTALYTD",Sales[Sales Amount YTD TOTALYTD]
+)
+ORDER BY 'Date'[Year Month Number]

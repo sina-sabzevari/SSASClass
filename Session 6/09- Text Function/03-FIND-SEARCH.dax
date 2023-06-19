@@ -1,0 +1,19 @@
+﻿
+EVALUATE
+CALCULATETABLE (
+    ADDCOLUMNS (
+        TOPN ( 5, VALUES ( 'Product'[Product Name] ) ),
+        "Position of red SEARCH" ,
+        
+        SEARCH ( --Not Case Sensetive
+        "red", --FindText
+        'Product'[Product Name], --WithinText
+        1, --StartPosition
+        -1 )--NotFoundValue
+        ,"Position of Red FIND", FIND ( --Case Sensetive
+        "Red", 'Product'[Product Name], 1, -1 )
+    
+        
+    ),
+    'Product'[Color] IN { "Red", "Blue" }
+)

@@ -1,0 +1,32 @@
+﻿EVALUATE
+SUMMARIZECOLUMNS (
+    DimDateParallel[date],
+    DimDateParallel[date_mapping],
+    DimDateParallel[type],
+    TREATAS ( { DATE ( 2020, 1, 2 ) }, DimDateParallel[date] )
+)
+------------------------------------------------------------------
+DEFINE
+MEASURE Sales[Sales Amount Special]=CALCULATE([Sales Amount],TREATAS(VALUES(DimDateParallel[date_mapping]),Sales[Order Date]))
+
+
+EVALUATE
+SUMMARIZECOLUMNS (
+    DimDateParallel[date],
+    DimDateParallel[date_mapping],
+    DimDateParallel[type],
+    TREATAS ( { DATE ( 2020, 1, 1) }, DimDateParallel[date] ),
+        TREATAS ( { "yesterday" }, DimDateParallel[type] ),
+    "Sales Amount",Sales[Sales Amount Special]
+)	
+
+EVALUATE
+SUMMARIZECOLUMNS (
+    DimDateParallel[date],
+    DimDateParallel[date_mapping],
+    DimDateParallel[type],
+    TREATAS ( { "yesterday" }, DimDateParallel[type] ),
+    "Yesterday Sales Amount",Sales[Sales Amount Special]
+)
+ORDER BY [date]
+

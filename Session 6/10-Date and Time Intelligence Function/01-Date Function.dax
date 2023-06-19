@@ -1,0 +1,96 @@
+﻿--  Extract date parts from a date
+EVALUATE
+ADDCOLUMNS (
+    TOPN ( 10, VALUES ( 'Date'[Date] ), 'Date'[Date], ASC ),
+    "Year",    YEAR    ( 'Date'[Date] ),    
+    "Quarter", QUARTER ( 'Date'[Date] ),
+    "Month",   MONTH   ( 'Date'[Date] ),   
+    "Day",     DAY     ( 'Date'[Date] )        
+)
+
+
+EVALUATE
+VAR _time=Time(12,32,10)
+RETURN
+ROW(
+    "Hour",   HOUR   ( _time ),
+    "Minute", MINUTE ( _time ),
+    "Second", SECOND ( _time)
+)
+
+EVALUATE
+ADDCOLUMNS (
+    TOPN ( 10, VALUES ( 'Date'[Date] ), 'Date'[Date], ASC ),
+    "Day of week", FORMAT  ( 'Date'[Date], "dddd" ),
+    "Weekday",     WEEKDAY ( 'Date'[Date]      ),    -- 1 is Sunday (Default)
+    "Weekday 1",   WEEKDAY ( 'Date'[Date], 1   ),    -- 1 is Sunday
+    "Weekday 2",   WEEKDAY ( 'Date'[Date], 2   ),    -- 1 is Monday
+    "Weekday 3",   WEEKDAY ( 'Date'[Date], 3   ),    -- 0 is Monday
+    "Weekday 11",  WEEKDAY ( 'Date'[Date], 11  ),    -- 1 is Monday
+    "Weekday 12",  WEEKDAY ( 'Date'[Date], 12  ),    -- 1 is Tuesday
+    "Weekday 13",  WEEKDAY ( 'Date'[Date], 13  ),    -- 1 is Wednesday
+    "Weekday 14",  WEEKDAY ( 'Date'[Date], 14  )     -- ... 
+)
+ORDER BY [Date]
+
+
+
+EVALUATE
+ADDCOLUMNS (
+    TOPN ( 10, VALUES ( 'Date'[Date] ), 'Date'[Date], ASC ),
+    "Day of week", FORMAT ( 'Date'[Date], "dddd" ),
+    "WEEKNUM",    WEEKNUM ( 'Date'[Date] ) ,    -- Same as 1, week start on Sun
+    "WEEKNUM  2", WEEKNUM ( 'Date'[Date],  2 ), -- Week start on Mon
+    "WEEKNUM 11", WEEKNUM ( 'Date'[Date], 11 ), -- 11 to 17: 1st DOW Mon 
+    "WEEKNUM 12", WEEKNUM ( 'Date'[Date], 12 ), -- 11 to 17: 1st DOW Tue
+    "WEEKNUM 13", WEEKNUM ( 'Date'[Date], 13 ), -- 11 to 17: 1st DOW Wed
+    "WEEKNUM 21", WEEKNUM ( 'Date'[Date], 21 )  -- ISO 8601 Week 
+                                                -- (1st thursday of the year)
+)
+ORDER BY 'Date'[Date]
+--  DATE and TIME are useful to create DateTime columns
+--  A DateTime is a number. Therefore, it is possible to
+--  sum the date and the time part.
+EVALUATE
+    {
+        DATE ( 2020, 10, 15 ),
+        TIME ( 22, 45, 30 ),
+        DATE ( 2020, 10, 15 ) + TIME ( 22, 45, 30 )
+    }
+    
+ --  DATEVALUE/TIMEVALUE convert strings into dates and times
+EVALUATE
+{
+    DATEVALUE ( "10/15/2020" ),
+    DATEVALUE ( "10-15-2020" ),
+    TIMEVALUE ( "12:45:01" ),
+    TIMEVALUE ( "12.45.01 AM" ),
+    TIMEVALUE ( "15:45:01 AM" )
+}  
+--  TODAY returns today, as a date. NOW also includes the time
+--  UTCTODAY and UTCNOW return today using UTC standard.
+--  The timezone is the timezone of the server running DAX, your
+--  PC when executed in Power BI Desktop.
+--
+--  The Power BI Service alwyas uses UTC. 
+--  Therefore, no daylight saving applies.
+EVALUATE
+{
+    ( "TODAY", TODAY () ),
+    ( "UTCTODAY", UTCTODAY () ),
+    ( "NOW", NOW () ),
+    ( "UTC NOW", UTCNOW () )
+}
+
+--  EDATE adds months to a date, 
+--  EOMONTH does the same, and it also goes at the end of the month
+EVALUATE
+ADDCOLUMNS (
+    TOPN ( 10, VALUES ( 'Date'[Date] ), 'Date'[Date], ASC ),
+    "EDATE, +1", EDATE ( 'Date'[Date], +1 ),
+    "EDATE, -1", EDATE ( 'Date'[Date], -1 ),
+    "EOMONTH, 0", EOMONTH ( 'Date'[Date], 0 ),
+    "EOMONTH, +1", EOMONTH ( 'Date'[Date], +1 ),
+    "EOMONTH, -1", EOMONTH ( 'Date'[Date], -1 )
+)
+ORDER BY 'Date'[Date]

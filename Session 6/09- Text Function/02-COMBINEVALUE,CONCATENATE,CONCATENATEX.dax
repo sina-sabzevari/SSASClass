@@ -1,0 +1,16 @@
+﻿EVALUATE
+ADDCOLUMNS(
+SUMMARIZE('Product',
+[Category],
+[Subcategory]),
+"category subcategory COMBINEVALUES",COMBINEVALUES(" | ",'Product'[Category],'Product'[Subcategory]),
+"category subcategory &",'Product'[Category] & " | " & 'Product'[Subcategory],
+"category subcategory CONCATENATE",CONCATENATE(CONCATENATE('Product'[Category]," | "),'Product'[Subcategory])
+)
+
+EVALUATE
+ADDCOLUMNS(
+VALUES('Product'[Category]),
+"@SubCategory CALCULATETABLE",CONCATENATEX(CALCULATETABLE(VALUES('Product'[Subcategory])),'Product'[Subcategory]," | "),
+"@SubCategory CALCULATE",CALCULATE(CONCATENATEX((VALUES('Product'[Subcategory])),'Product'[Subcategory]," | "))
+)

@@ -1,0 +1,68 @@
+﻿DEFINE
+    VAR Val = "DAX is so cool !"
+    VAR Replacement = "fantastic"
+	VAR A = "sqlbi"
+	VAR B = "SQLBI"
+    VAR Test = "  DAX is          awesome !!!    "
+EVALUATE
+{
+    ( "Original = " &      Val   ),
+    ( "UPPER = " & UPPER ( Val ) ),
+    ( "LOWER = " & LOWER ( Val ) )
+}
+
+EVALUATE
+{
+    ( "LEFT ( Val, 3 ) ",   LEFT  ( Val, 3     ) ),
+    ( "RIGHT ( Val, 5 )",   RIGHT ( Val, 5     ) ),
+    ( "MID ( Val, 11, 4 )", MID   ( Val, 11, 4 ) ),
+    ( "LEN ( Val )",        LEN   ( Val        ) )
+}
+
+
+
+
+EVALUATE
+{
+    ( "Original", Val ),
+    ( "Replaced", REPLACE ( Val, 11, 4 --The number of characters that you want to replace.
+    
+    , Replacement ) )
+}
+
+
+--The SUBSTITUTE function is case-sensitive.
+EVALUATE
+CALCULATETABLE (
+    ADDCOLUMNS (
+        TOPN ( 5, VALUES ( 'Product'[Product Name] ) ),
+        "New name",
+            SUBSTITUTE (
+                'Product'[Product Name],
+                "MP3 Player",
+                "Zune-like player"
+            )
+    ),
+    'Product'[Color] IN { "Red", "Blue" }
+)
+
+
+EVALUATE
+{
+REPT("?",5)
+}
+
+
+
+EVALUATE
+    {
+        ( "A = B", A = B ),
+        ( "EXACT ( A, B )", EXACT ( A, B ) )
+    }
+    
+    
+EVALUATE
+    {
+        ( "Original", Test ),
+        ( "Trimmed",  TRIM ( Test ) )
+    }

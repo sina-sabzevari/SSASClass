@@ -1,0 +1,26 @@
+﻿EVALUATE
+SUMMARIZECOLUMNS (
+    DimDate[date],
+    TREATAS ( { "The first day of month" }, DimDateParallel[type] ),
+    "Sales Amount MTD",
+     VAR _start=MAX(DimDateParallel[date_mapping]) 
+     VAR _difference=MAX(DimDateParallel[date]) - MAX(DimDateParallel[date_mapping])
+    RETURN
+    CALCULATE([Sales Amount],DATESINPERIOD(DimDate[date],_start,_difference,day)
+    ))
+    order by [date]
+
+    
+ EVALUATE
+SUMMARIZECOLUMNS (
+    DimDate[date],
+//    TREATAS ( { DATE ( 2020, 1, 2 ) }, DimDate[date] ),
+    TREATAS ( { "The first day of month" }, DimDateParallel[type] ),
+     "Sales Amount MTD",
+     VAR _start=MAX(DimDateParallel[date_mapping]) 
+     VAR _end=MAX(DimDateParallel[date])
+    RETURN
+    CALCULATE([Sales Amount],DATESBETWEEN(DimDate[date],_start,_end))
+    )
+ORDER BY DimDate[date]
+

@@ -1,0 +1,23 @@
+﻿DEFINE MEASURE Sales[ByCountry] =
+    VAR SalesByCustomer =
+        ADDCOLUMNS (
+            VALUES ( Customer[Country] ),
+            "Amount", [Sales Amount]
+        )
+    VAR Result = TOCSV (  SalesByCustomer, 3, ",", FALSE  )
+    RETURN Result
+EVALUATE
+SUMMARIZECOLUMNS ( 'Customer'[Continent], "By Country CSV", [ByCountry] )
+----
+
+
+DEFINE MEASURE Sales[ByCountry] =
+    VAR SalesByCustomer =
+        ADDCOLUMNS (
+            VALUES ( Customer[Country] ),
+            "Amount", [Sales Amount]
+        )
+    VAR Result = TOJSON (  SalesByCustomer, 3  )
+    RETURN Result
+EVALUATE
+SUMMARIZECOLUMNS ( 'Customer'[Continent], "By Country JSON", [ByCountry] )
