@@ -1,0 +1,31 @@
+﻿DEFINE
+MEASURE Sales[Sale Amount RT]=
+VAR LastVisibleDate=MAX('DimDate'[Date])    --Last of Month current row
+VAR FirstVisibleDate=Min('DimDate'[Date])   --First of Month current row
+VAR LAstDateWithSales=CALCULATE(MAX(Sales[Order Date]),REMOVEFILTERS('DimDate')) --Last date for Sales (any time) for example 2020-03
+RETURN
+IF(FirstVisibleDate<=LAstDateWithSales,CALCULATE([Sales Amount],'DimDate'[Date]<=FirstVisibleDate,VALUES(DimDate[Week_day_order])))
+--CALCULATE([Sales Amount],'DimDate'[Date]<=FirstVisibleDate)
+
+
+EVALUATE
+SUMMARIZECOLUMNS(
+ROLLUPADDISSUBTOTAL('DimDate'[Year],"IsTotal",'DimDate'[month_order],"IsYearTotal"),
+"Sales Amount",[Sales Amount],
+"Sales Amount RT",Sales[Sale Amount RT]
+)
+order by 'DimDate'[Year],'DimDate'[month_order]
+
+
+EVALUATE
+SUMMARIZECOLUMNS(
+ROLLUPADDISSUBTOTAL('DimDate'[Year],"IsTotal",'DimDate'[month_order],"IsYearTotal"),
+TREATAS({1,2,3,4},DimDate[Week_day_order]),
+"Sales Amount",[Sales Amount],
+"Last Date",Sales[Sale Amount RT]
+)
+order by 'DimDate'[Year],'DimDate'[month_order]
+
+
+
+

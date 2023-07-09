@@ -1,0 +1,10 @@
+﻿EVALUATE
+
+SELECTCOLUMNS(Sales,
+"Order Date",Sales[Order Date],
+"Deliver Date",Sales[Delivery Date],
+"Product Name",RELATED('Product'[Product Name]),
+"Category",RELATED('Product'[Category]),
+"SubCategory",RELATED('Product'[Subcategory]),
+"Store Country",RELATED(Store[Country])
+)

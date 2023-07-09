@@ -1,0 +1,15 @@
+﻿DEFINE
+var _product_Sales=ADDCOLUMNS(
+				VALUES('Product'[Product Name]),
+				"@SalesAmount",[Sales Amount])
+
+EVALUATE
+ADDCOLUMNS(
+_product_Sales,
+"@RowNumebr",
+ROWNUMBER(
+_product_Sales,
+ORDERBY([@SalesAmount],DESC )
+)
+)
+order by [@RowNumebr]

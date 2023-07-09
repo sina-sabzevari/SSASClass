@@ -1,0 +1,37 @@
+﻿DEFINE
+TABLE _config=
+	DATATABLE(
+		"Name",STRING,
+		{
+			{"Sales Amount"},
+			{"Sales Cost"}
+		}	
+	
+	)
+
+MEASURE Sales[Sales Cost]=SUMX(Sales,Sales[Quantity]*RELATED('Product'[Unit Cost]))
+
+EVALUATE
+SUMMARIZECOLUMNS(
+	'Product'[Product Name],
+	TREATAS({"Sales Amount"},_config[Name]),
+	"Sales Amount",
+		IF(CONTAINS(_config,_config[name],"Sales Amount"),[Sales Amount],BLANK()),
+	"Sales Cost",IF(CONTAINS(_config,_config[name],"Sales Cost"),[Sales Cost],BLANK())
+	)
+
+EVALUATE
+SUMMARIZECOLUMNS(
+'Product'[Product Name],
+--	TREATAS({"Sales Cost"},_config[Name]),
+"Measure",
+	VAR _selectedValue=SELECTEDVALUE(_config[name])
+	RETURN
+		SWITCH(_selectedValue,
+			"Sales Amount",[Sales Amount],
+			"Sales Cost",[Sales Cost],
+			[Sales Amount]
+			)
+			)
+
+			

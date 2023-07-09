@@ -1,0 +1,10 @@
+﻿DEFINE
+	VAR _number=10
+EVALUATE
+{
+
+IF(_number>0,SQRT(_number),_number),
+IFERROR(SQRT(_number),_number),
+IF(NOT ISERROR(SQRT(_number)),SQRT(_number),_number)
+
+}

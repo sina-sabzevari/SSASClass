@@ -1,0 +1,18 @@
+﻿DEFINE
+VAR BrandsAndSales =
+    ADDCOLUMNS (
+        ALL ( 'Product'[Category],'Product'[Brand] ),
+        "@Sales", MROUND([Sales Amount],1000000)
+    )
+
+EVALUATE
+BrandsAndSales
+ORDER BY [Sales Amount] DESC
+
+EVALUATE
+    INDEX (
+        1,
+        BrandsAndSales,
+        ORDERBY ( [@Sales], DESC ),
+        partitionby('Product'[Category])
+    )

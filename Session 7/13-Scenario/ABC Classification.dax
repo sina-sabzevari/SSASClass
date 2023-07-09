@@ -1,0 +1,63 @@
+﻿DEFINE
+TABLE _config=
+		DATATABLE(
+			"ABC Class",STRING,
+			"min_value",DOUBLE,
+			"max_value",DOUBLE,
+			{
+				{"A",0,0.7},
+				{"B",0.7,0.9},
+				{"C",0.9,1}
+			
+			})
+MEASURE Sales[Sales ABC]=			
+VAR SalesByProduct=
+	ADDCOLUMNS(
+		ALLSELECTED('Product'),
+		"@ProductSale",[Sales Amount]
+		)
+VAR AllSales=CALCULATE([Sales Amount],ALLSELECTED('Product')
+)		
+VAR CummulativePctByProduct=
+	ADDCOLUMNS(
+	SalesByProduct,
+	 "@cummulativePct",
+	 VAR CurrentSales=[@ProductSale]
+	 VAR CummulativeSales=
+	 	Filter(SalesByProduct,
+	 		[@ProductSale]>=CurrentSales)
+	 VAR CumulatedSalesAmount=
+	 	SUMX(CummulativeSales,
+	 	[@ProductSale]
+	 	)
+	 	RETURN
+	 	DIVIDE(CumulatedSalesAmount,
+	 	AllSales))
+	 		
+VAR ProductInClass=
+	Filter(
+	CROSSJOIN(
+		CummulativePctByProduct,
+		_config),
+		AND([@cummulativePct]>_config[min_value],
+			[@cummulativePct]<=_config[max_value]
+		
+		))
+VAR Result=
+		CALCULATE([Sales Amount],
+					KEEPFILTERS(ProductInClass)
+					)
+		
+RETURN
+Result
+
+EVALUATE
+SUMMARIZECOLUMNS(
+	_config[ABC Class],
+	TREATAS({"Audio"},'Product'[Category])
+	,
+	"Sales ABC",Sales[Sales ABC]
+	)
+
+
+

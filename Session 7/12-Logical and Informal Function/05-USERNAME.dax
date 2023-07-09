@@ -1,0 +1,12 @@
+﻿--  USERNAME is the local user name (same as USERPRINCIPALNAME using 
+--  Azure AS and Power BI Service)
+--  USEROBJECTID is the security identifier in Active Directory and 
+--  Azure Active Directory
+--  USERPRINCIPALNAME is the user principal name, typically the user 
+--  email (it could be different in Active Directory on-premises)
+EVALUATE
+{
+    ( "USERNAME",           USERNAME () ),
+    ( "USEROBJECTID",       USEROBJECTID () ),
+    ( "USEPRINCIPALNAME",   USERPRINCIPALNAME () )
+}

@@ -1,0 +1,16 @@
+﻿EVALUATE
+    SUMMARIZECOLUMNS(
+      ROLLUPADDISSUBTOTAL('Date'[Year], "IsGrandTotal", 'Date'[Month], "IsYearTotal"),
+      TREATAS({"Canada"},Store[Country]),
+      "SumQuantity", CALCULATE(SUM('Sales'[Quantity])),
+      "Is Filter Store Country",ISFILTERED(Store[Country]),
+      "Is Filter Store State",ISFILTERED(Store[State]),
+      "Is Cross Filter Store State",ISCROSSFILTERED(Store[State]),
+      "IsInScope year",ISINSCOPE('Date'[Year]),
+      "IsInscope month",ISINSCOPE('date'[Month]),
+      "Hasonevalue Store country",HASONEVALUE(Store[Country]),
+      "HasoneValue Date year",HASONEVALUE('Date'[Year]),
+      "HasoneValue Date month",HASONEVALUE('Date'[Month]),
+      "HasoneFilter Store Country",HASONEFILTER(Store[Country]),
+      "HasoneFilter Store State",HASONEFILTER(Store[State])
+    )

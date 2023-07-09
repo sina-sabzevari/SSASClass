@@ -1,0 +1,17 @@
+﻿DEFINE
+var _product_Sales=ADDCOLUMNS(
+				SUMMARIZE('Product','Product'[Category],'Product'[Product Name]),
+				"@SalesAmount",mround([Sales Amount],100000))
+
+EVALUATE
+ADDCOLUMNS(
+_product_Sales,
+"@RowNumebr",
+rank(DENSE,
+_product_Sales,
+ORDERBY([@SalesAmount],DESC ),
+PARTITIONBY([Category])
+)
+)
+order by [@SalesAmount]
+ desc

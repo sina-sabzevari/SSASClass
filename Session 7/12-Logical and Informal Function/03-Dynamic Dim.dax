@@ -1,0 +1,28 @@
+﻿Define
+Table _config=DATATABLE(
+	"Name",STRING,
+	{
+		{"Product"},
+		{"Store"}
+	})
+TABLE _dim=UNION(
+VALUES('Store'[Name]),
+VALUES('Product'[Product Name])
+)
+	
+	
+MEASURE Sales[Sales Amount Product]=CALCULATE([Sales Amount],TREATAS(VALUES(_dim[name]),'Product'[Product Name]))
+MEASURE Sales[Sales Amount Store]=CALCULATE([Sales Amount],TREATAS(VALUES(_dim[name]),'Store'[Name]))
+
+
+EVALUATE
+SUMMARIZECOLUMNS(
+_dim[name],
+TREATAS({"product"},_config[name]),
+"Measure",
+SWITCH(SELECTEDVALUE(_config[name]),
+"Product",Sales[Sales Amount Product],
+"Store",Sales[Sales Amount Store]
+)
+)
+

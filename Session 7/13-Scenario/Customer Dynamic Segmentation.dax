@@ -1,0 +1,58 @@
+﻿DEFINE
+TABLE _config=DATATABLE(
+				"Name",STRING,
+				"min_value",DOUBLE,
+				"max_value",DOUBLE,
+				{
+					{"Silver",0,100},
+					{"Gold",100,500},
+					{"Platinum",500,2000},
+					{"Diamond",2000,999999999}
+				
+				}
+				)
+
+MEASURE Sales[test]=
+				VAR CustomerInSegment=
+				FILTER(Customer,
+				VAR SalesForCustomer=[Sales Amount]
+				VAR SegmentForCustomer=
+					FILTER(
+						_config,
+						Not ISBLANK(SalesForCustomer)
+							&& _config[min_value]<SalesForCustomer
+							&& _config[max_value]>=SalesForCustomer)
+				VAR IsCustomerInSegment=Not ISEMPTY(SegmentForCustomer)
+				Return IsCustomerInSegment
+				)
+				return CALCULATE(countrows(Customer),KEEPFILTERS(CustomerInSegment))
+
+---------------------------------------------
+
+
+EVALUATE
+CALCULATETABLE(
+				VAR SalesForCustomer=[Sales Amount]
+				VAR SegmentForCustomer=
+					FILTER(
+						_config,
+						Not ISBLANK(SalesForCustomer)
+							&& _config[min_value]<SalesForCustomer
+							&& _config[max_value]>=SalesForCustomer
+				)
+				RETURN SegmentForCustomer,
+				Customer[CustomerKey]=1212939,
+				'Date'[Year]=2015
+)
+
+
+
+EVALUATE
+SUMMARIZECOLUMNS(
+	'Date'[Year],
+	_config[Name],
+	"Segment",Sales[test]
+				
+				)
+				
+	

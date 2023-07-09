@@ -1,0 +1,42 @@
+﻿EVALUATE
+SUMMARIZECOLUMNS (
+    'Date'[Year Month Number],
+    'Date'[Year Month],
+    "Sales Amount", [Sales Amount],
+    "Sales RT",
+        SUMX (
+            WINDOW (
+                1, ABS, --First ROW
+                0, REL, -- Each iterate it relative
+                ORDERBY (
+                    'Date'[Year Month Number], ASC,
+                    'Date'[Year Month], ASC
+                )
+            ),
+            [Sales Amount]
+        )
+)
+ORDER BY 'Date'[Year Month Number]
+
+
+
+EVALUATE
+SUMMARIZECOLUMNS (
+    'Date'[Year Month Number],
+    'Date'[Year Month],
+    "Sales Amount", [Sales Amount],
+    "Sales RT",
+        SUMX (
+            WINDOW (
+                1, ABS,
+                0, REL,
+                ORDERBY (
+                    'Date'[Year Month Number], ASC,
+                    'Date'[Year Month], ASC
+                ),
+                PARTITIONBY ( 'Date'[Year] )
+            ),
+            [Sales Amount]
+        )
+)
+ORDER BY 'Date'[Year Month Number]
